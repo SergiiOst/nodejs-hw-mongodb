@@ -22,12 +22,6 @@ export const startServer = () => {
     }),
   );
 
-  app.get('/', (req, res) => {
-    res.json({
-      message: 'Hello, this is HW3 Node.js',
-    });
-  });
-
   app.use(contactsRouter);
 
   app.use('*', notFoundHandler);
