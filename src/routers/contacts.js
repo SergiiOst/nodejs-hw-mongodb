@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import {
   getContactsController,
-  getContactsByIdController,
   createContactController,
   deleteContactController,
   patchContactController,
+  getContactByIdController,
 } from '../controllers/contacts.js';
 
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
@@ -22,13 +22,7 @@ router.use(authenticate);
 
 router.get('/', ctrlWrapper(getContactsController));
 
-router.get('/contacts', ctrlWrapper(getContactsController));
-
-router.get(
-  '/contacts/:contactId',
-  isValidId,
-  ctrlWrapper(getContactsByIdController),
-);
+router.get('/:contactId', isValidId, ctrlWrapper(getContactByIdController));
 
 router.post(
   '/contacts',
@@ -36,17 +30,18 @@ router.post(
   ctrlWrapper(createContactController),
 );
 
-router.delete(
-  '/contacts/:contactId',
-  isValidId,
-  ctrlWrapper(deleteContactController),
+router.post(
+  '/',
+  validateBody(createContactSchema),
+  ctrlWrapper(createContactController),
 );
 
 router.patch(
-  '/contacts/:contactId',
-  validateBody(updateContactSchema),
+  '/:contactId',
   isValidId,
+  validateBody(updateContactSchema),
   ctrlWrapper(patchContactController),
 );
+router.delete('/:contactId', isValidId, ctrlWrapper(deleteContactController));
 
 export default router;
